@@ -8,7 +8,7 @@ def download_mp3(link):
             "format": "bestaudio/best",
             "postprocessors": [{
                 "key": "FFmpegExtractAudio",
-                "preferredcodec": "mp4",
+                "preferredcodec": "mp3",
                 "preferredquality": "192"
                 }],
             "outtmpl": os.path.join(directorio, "%(title)s.%(ext)s"),
