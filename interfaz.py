@@ -6,6 +6,7 @@ from kivy.uix.button import Button
 from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.anchorlayout import AnchorLayout
 from kivy.uix.boxlayout import BoxLayout
+from kivy.uix.gridlayout import GridLayout
 from kivy.graphics import Color, Rectangle
 import logica
 
@@ -17,6 +18,7 @@ class Interfaz(App):
 
 
     def build(self):
+        #layout principal
         float_body = FloatLayout()
 
         with float_body.canvas.before:
@@ -24,16 +26,22 @@ class Interfaz(App):
             self.rect = Rectangle(size = float_body.size, pos = float_body.pos)
 
         float_body.bind(size = self._update_rect, pos = self._update_rect)
-        
+
+        #layout secundario
         anchor_body = AnchorLayout(anchor_x="center", anchor_y="center")
 
+        #layout tercero
         body = BoxLayout(orientation="vertical", size_hint=(0.8, None), height=100)
+
+        #layuot cuarto
+        empaquetador = GridLayout(rows = 1, cols = 2)
 
         body.center_x = float_body.center_x
         body.center_y = float_body.center_y
-
+        
+        #Estos se guardan dentro del tercer layout osea body
         titulo = Label(text="No Name")        
-        self.campo_texto = TextInput(multiline=False, height=40, disabled=True)
+        self.campo_texto = TextInput(multiline=False, height=44, disabled=True, size_hint_x = None, width = 600)
         self.campo_texto.bind(on_text_validate=self.enviardatos)
 
         # Crear el Dropdown
@@ -45,7 +53,7 @@ class Interfaz(App):
         self.dropdown.add_widget(self.option1)
 
         # Opción 2
-        self.option2 = Button(text='Opción 2', size_hint_y=None, height=44, background_color = "red")
+        self.option2 = Button(text='Opción 2', size_hint_y=None, height=44)
         self.option2.bind(on_release=self.datos)
         self.dropdown.add_widget(self.option2)
 
@@ -54,9 +62,11 @@ class Interfaz(App):
         self.dropdown_button.bind(on_release=self.dropdown.open)
 
         # Agregar los widgets al layout
+        empaquetador.add_widget(self.campo_texto)
+        empaquetador.add_widget(self.dropdown_button)
         body.add_widget(titulo)
-        body.add_widget(self.campo_texto)
-        body.add_widget(self.dropdown_button)  
+        body.add_widget(empaquetador)
+        #body.add_widget(self.dropdown_button)  
         anchor_body.add_widget(body)
         float_body.add_widget(anchor_body)
         return float_body
