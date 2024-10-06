@@ -6,6 +6,7 @@ from kivy.uix.button import Button
 from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.anchorlayout import AnchorLayout
 from kivy.uix.boxlayout import BoxLayout
+from kivy.graphics import Color, Rectangle
 import logica
 
 class Interfaz(App):
@@ -14,8 +15,15 @@ class Interfaz(App):
         self.link = ""
         self.selected_option = None
 
+
     def build(self):
         float_body = FloatLayout()
+
+        with float_body.canvas.before:
+            Color(0.882, 0.973, 0.980, 0.2)
+            self.rect = Rectangle(size = float_body.size, pos = float_body.pos)
+
+        float_body.bind(size = self._update_rect, pos = self._update_rect)
         
         anchor_body = AnchorLayout(anchor_x="center", anchor_y="center")
 
@@ -37,7 +45,7 @@ class Interfaz(App):
         self.dropdown.add_widget(self.option1)
 
         # Opción 2
-        self.option2 = Button(text='Opción 2', size_hint_y=None, height=44)
+        self.option2 = Button(text='Opción 2', size_hint_y=None, height=44, background_color = "red")
         self.option2.bind(on_release=self.datos)
         self.dropdown.add_widget(self.option2)
 
@@ -52,6 +60,10 @@ class Interfaz(App):
         anchor_body.add_widget(body)
         float_body.add_widget(anchor_body)
         return float_body
+
+    def _update_rect(self, *args):
+        self.rect.pos = (0,0)
+        self.rect.size = self.root.size
 
     def datos(self, instance):  # Corregido: sefl -> self
         self.selected_option = instance.text
